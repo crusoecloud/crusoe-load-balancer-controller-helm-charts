@@ -11,17 +11,19 @@ BUILDTAGS :=
 
 GOLANGCI_VERSION = v1.41.1
 TOOLS_VERSION = v0.1.1
+GO_ACC_VERSION = latest
+GOTESTSUM_VERSION = latest
 
 .PHONY: dev
-dev: test build-deps lint ## Runs a build-deps, test, lint
+dev: test build-deps precommit lint ## Runs a build-deps, test, lint
 
 .PHONY: ci
-ci: test-ci build-deps lint ## Runs test, build-deps, lint
+ci: test-ci build-deps lint-ci ## Runs test, build-deps, lint
 
 .PHONY: build-deps
 build-deps: ## Install build dependencies
 	@echo "==> $@"
-	@GO111MODULE=on go install github.com/golangci/golangci-lint/cmd/golangci-lint@${GOLANGCI_VERSION}
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@${GOLANGCI_VERSION}
 
 .PHONY: get-aliaslint
 get-aliaslint:
@@ -45,7 +47,9 @@ test-ci: ## Runs the go tests with additional options for a CI environment
 	@echo "==> $@"
 	@go mod tidy
 	@git diff --exit-code go.mod go.sum # fail if go.mod is not tidy
-	@go test -tags "$(BUILDTAGS)" -coverprofile=coverage.out -race -v ./...
+	@go install github.com/ory/go-acc@${GO_ACC_VERSION}
+	@go install gotest.tools/gotestsum@${GOTESTSUM_VERSION}
+	@gotestsum --junitfile tests.xml --raw-command -- go-acc -o coverage.out ./... -- -json -tags "$(BUILDTAGS)" -race -v
 	@go tool cover -func=coverage.out
 
 .PHONY: lint
@@ -53,6 +57,12 @@ lint: get-aliaslint ## Verifies `golangci-lint` passes
 	@echo "==> $@"
 	@golangci-lint version
 	@golangci-lint run ./...
+
+.PHONY: lint-ci
+lint-ci: get-aliaslint ## Verifies `golangci-lint` passes and outputs in CI-friendly format
+	@echo "==> $@"
+	@golangci-lint version
+	@golangci-lint run ./... --out-format code-climate > golangci-lint.json
 
 .PHONY: build
 build: ## Builds the executable and places it in the build dir

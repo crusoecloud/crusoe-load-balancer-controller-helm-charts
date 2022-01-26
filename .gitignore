@@ -4,3 +4,5 @@ dist/
 coverage.out
 aliaslint.so
 gokart_result.json
+golangci-lint.json
+tests.xml
