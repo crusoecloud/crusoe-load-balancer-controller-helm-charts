@@ -37,7 +37,7 @@ linters-settings:
       - commentedOutCode
   whitespace:
     multi-if: true # Enforces newlines (or comments) after every multi-line if statement
-    multi-func: true # Enforces newlines (or comments) after every multi-line function signature
+    multi-func: false # Enforces newlines (or comments) after every multi-line function signature
   gosec:
     global:
       audit: enabled # Run extra checks that might be "nosy"
@@ -46,18 +46,26 @@ linters:
   disable-all: true
   enable:
     - aliaslint
+    - asasalint
     - asciicheck
+    - bidichk
     - bodyclose
+    - containedctx
+    - contextcheck
     - cyclop
     - deadcode
+    - decorder
     - depguard
     - dogsled
     - dupl
     - durationcheck
+    - errchkjson
     - errcheck
     - errorlint
+    - execinquery
     - exhaustive
     # - exhaustivestruct
+    #- exhaustruct
     - exportloopref
     - forbidigo
     - forcetypeassert
@@ -84,29 +92,37 @@ linters:
     - gosec
     - gosimple
     - govet
+    - grouper
     - ifshort
     # - importas
     - ineffassign
+    - ireturn
     - lll
+    - maintidx
     - makezero
     - misspell
     - nakedret
     - nestif
     - nilerr
+    - nilnil
     - nlreturn
     - noctx
     - nolintlint
+    - nonamedreturns
+    - nosnakecase
+    - nosprintfhostport
     - paralleltest
     - prealloc
     - predeclared
     - promlinter
     - revive
-    - rowserrcheck
-    - sqlclosecheck
+    #- rowserrcheck
+    #- sqlclosecheck
     - staticcheck
-    - structcheck
+    #- structcheck
     - stylecheck
     - tagliatelle
+    - tenv
     - testpackage
     - thelper
     - tparallel
@@ -115,7 +131,8 @@ linters:
     - unparam # this one is useful to check sometimes
     - unused
     - varcheck
-    - wastedassign
+    - varnamelen
+    #- wastedassign
     - whitespace
     - wrapcheck
     # - wsl

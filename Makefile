@@ -9,8 +9,8 @@ BUILDDIR := ${PREFIX}/dist
 # Set any default go build tags
 BUILDTAGS :=
 
-GOLANGCI_VERSION = v1.41.1
-TOOLS_VERSION = v0.1.1
+GOLANGCI_VERSION = v1.47.3
+TOOLS_VERSION = v0.7.0
 GO_ACC_VERSION = latest
 GOTESTSUM_VERSION = latest
 
@@ -32,7 +32,7 @@ get-aliaslint:
 	@cd `go env GOMODCACHE`/gitlab.com/crusoeenergy/tools@${TOOLS_VERSION}; go build -o ${PREFIX}/aliaslint.so -buildmode=plugin aliaslint/plugin/aliaslint.go
 
 .PHONY: precommit
-precommit: ## runs various formatters that will be checked by linter (but can/should be automatic in your editor)
+precommit: get-aliaslint ## runs various formatters that will be checked by linter (but can/should be automatic in your editor)
 	@echo "==> $@"
 	@go mod tidy
 	@golangci-lint run --fix ./...
