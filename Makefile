@@ -13,6 +13,7 @@ GOLANGCI_VERSION = v1.47.3
 TOOLS_VERSION = v0.7.0
 GO_ACC_VERSION = latest
 GOTESTSUM_VERSION = latest
+GOCOVER_VERSION = latest
 
 .PHONY: dev
 dev: test build-deps precommit lint ## Runs a build-deps, test, lint
@@ -49,8 +50,10 @@ test-ci: ## Runs the go tests with additional options for a CI environment
 	@git diff --exit-code go.mod go.sum # fail if go.mod is not tidy
 	@go install github.com/ory/go-acc@${GO_ACC_VERSION}
 	@go install gotest.tools/gotestsum@${GOTESTSUM_VERSION}
+	@go install github.com/boumenot/gocover-cobertura@${GOCOVER_VERSION}
 	@gotestsum --junitfile tests.xml --raw-command -- go-acc -o coverage.out ./... -- -json -tags "$(BUILDTAGS)" -race -v
 	@go tool cover -func=coverage.out
+	@gocover-cobertura < coverage.out > coverage.xml
 
 .PHONY: lint
 lint: get-aliaslint ## Verifies `golangci-lint` passes
