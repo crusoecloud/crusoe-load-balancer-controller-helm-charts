@@ -4,10 +4,13 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
+	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+
+	"gitlab.com/crusoeenergy/schemas/utils/log"
 )
 
 // TODO(template) update or delete this. See README.md.
@@ -27,12 +30,31 @@ func RunCmd() {
 			return
 
 		case <-interrupt:
-			log.Info().Msg("interrupt signal received - shutting down agent")
+			// TODO(template) set service name
+			log.Info(ctx).Msg("interrupt signal received - shutting down <service>")
 			cancel()
 		}
 	}()
+	// TODO(template) this will force shutdown hangDetectionSleepTime after context is canceled. Remove if unwanted
+	go detectAndKillHang(ctx)
 
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout})
+	zerolog.TimeFieldFormat = "2006-01-02T15:04:05.999Z07:00" // RFC3339 with millisecond precision
 
-	log.Info().Msg("Hello, world!")
+	log.Info(ctx).Msg("Hello, world!")
+}
+
+const (
+	hangDetectionSleepTime = 30 * time.Second
+)
+
+func detectAndKillHang(ctx context.Context) {
+	<-ctx.Done()
+	time.Sleep(hangDetectionSleepTime)
+
+	// Print all goroutine stack traces
+	buf := make([]byte, 1<<16) //nolint:gomnd // pick a big enough buffer size to capture all goroutines
+	bytesWritten := runtime.Stack(buf, true)
+	log.Info(ctx).Msgf("%s", buf[:bytesWritten])
+
+	panic("hang detected")
 }

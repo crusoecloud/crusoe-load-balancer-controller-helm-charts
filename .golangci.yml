@@ -1,10 +1,11 @@
 # see https://golangci-lint.run/usage/configuration/
 linters-settings:
   custom:
-    aliaslint:
-      path: aliaslint.so
-      description: Checks that import aliases are consistent across the module.
-      original-url: gitlab.com/crusoeenergy/tools
+    # aliaslint breaks with go 1.21
+#    aliaslint:
+#      path: aliaslint.so
+#      description: Checks that import aliases are consistent across the module.
+#      original-url: gitlab.com/crusoeenergy/tools
   errcheck:
     # report about not checking of errors in type assertions: `a := b.(MyStruct)`;
     # default is false: such cases aren't reported by default.
@@ -45,7 +46,7 @@ linters-settings:
 linters:
   disable-all: true
   enable:
-    - aliaslint
+#    - aliaslint # breaks with go 1.21
     - asasalint
     - asciicheck
     - bidichk
@@ -55,7 +56,7 @@ linters:
     - cyclop
     - deadcode
     - decorder
-    - depguard
+#    - depguard # Duplicative with CODEOWNERS restrictions on go.mod files
     - dogsled
     - dupl
     - durationcheck
@@ -153,6 +154,6 @@ run:
 # golangci.com configuration
 # https://github.com/golangci/golangci/wiki/Configuration
 service:
-  golangci-lint-version: 1.41.x # use the fixed version to not introduce new linters unexpectedly
+  golangci-lint-version: 1.55.2 # use the fixed version to not introduce new linters unexpectedly
   prepare:
     - echo "here I can run custom commands, but no preparation needed for this repo"
