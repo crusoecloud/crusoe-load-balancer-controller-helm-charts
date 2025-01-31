@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "crusoe-lb-controller.fullname" . }}
+  namespace: {{ .Values.controller.namespace }} 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "crusoe-lb-controller.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "crusoe-lb-controller.name" . }}
+    spec:
+      serviceAccountName: {{ include "crusoe-lb-controller.serviceAccountName" . }}
+      {{- with .Values.controller.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: crusoe-lb-controller
+          image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          env:
+            - name: CRUSOE_API_ENDPOINT
+              value: "{{ .Values.controller.env.CRUSOE_API_ENDPOINT }}"
+            - name: CRUSOE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{.Values.crusoe.secrets.crusoeApiKeys.secretName}}
+                  key: {{.Values.crusoe.secrets.crusoeApiKeys.accessKeyPath}}
+            - name: CRUSOE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
+                  key: {{ .Values.crusoe.secrets.crusoeApiKeys.secretKeyPath}}
+            {{- with .Values.crusoe.projectID }}
+            - name: CRUSOE_PROJECT_ID
+              value: {{ . }}
+            {{- end }}
+            - name: CRUSOE_VPC_ID
+              value: "{{ .Values.controller.env.CRUSOE_VPC_ID }}"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName

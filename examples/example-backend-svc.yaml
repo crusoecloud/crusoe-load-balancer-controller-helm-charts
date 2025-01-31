@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: http-echo
+        image: hashicorp/http-echo:0.2.3
+        args:
+          - "-listen=:8080"
+          - "-text=You just hit crusoe's loadbalancer! :)"
+        ports:
+          - containerPort: 8080
+            hostPort: 8080

@@ -1,0 +1,25 @@
+crusoe:
+  # If not running on a Crusoe Managed Kubernetes cluster, projectID should be set to the Crusoe Cloud project ID
+  # for your cluster.
+  projectID: ""
+  secrets:
+    crusoeApiKeys:
+      # The Crusoe LB Controller requires access to the Crusoe API in order to manage load balancer resources.
+      # It is expected that the secret will contain two keys at accessKeyPath and secretKeyPath containing
+      # the base64 encoded access key and secret key respectively.
+      secretName: "crusoe-secrets"
+      accessKeyPath: "CRUSOE_ACCESS_KEY"
+      secretKeyPath: "CRUSOE_SECRET_KEY"
+
+controller:
+  namespace: kube-system
+  image:
+    repository: ghcr.io/crusoecloud/crusoe-load-balancer-controller
+    tag: "latest"
+    pullPolicy: Always
+    imagePullSecrets: []
+
+  env:
+    CRUSOE_API_ENDPOINT: "https://api.crusoecloud.com/v1alpha5"
+    CRUSOE_VPC_ID: "<vpc-id>"
+    
