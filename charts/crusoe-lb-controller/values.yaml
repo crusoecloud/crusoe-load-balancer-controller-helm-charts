@@ -10,9 +10,10 @@ crusoe:
       secretName: "crusoe-secrets"
       accessKeyPath: "CRUSOE_ACCESS_KEY"
       secretKeyPath: "CRUSOE_SECRET_KEY"
+      clusterIdPath: "CRUSOE_CLUSTER_ID"
 
 controller:
-  namespace: kube-system
+  namespace: crusoe-system
   image:
     repository: ghcr.io/crusoecloud/crusoe-load-balancer-controller
     tag: "latest"
@@ -21,5 +22,4 @@ controller:
 
   env:
     CRUSOE_API_ENDPOINT: "https://api.crusoecloud.com/v1alpha5"
-    CRUSOE_VPC_ID: "<vpc-id>"
     

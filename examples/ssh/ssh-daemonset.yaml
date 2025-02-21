@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ssh-backend
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: ssh-backend
+  template:
+    metadata:
+      labels:
+        app: ssh-backend
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      volumes:
+        - name: ssh-config
+          emptyDir: {}         # ephemeral volume for /config
+        - name: sshkeys-cm
+          configMap:
+            name: ssh-auth-keys
+            items:
+              - key: authorized_keys
+                path: authorized_keys
+      # 1) initContainer: copy authorized_keys -> /config/.ssh/authorized_keys
+      #    and fix ownership to match the "abc" user that linuxserver container runs as.
+      initContainers:
+      - name: init-ssh-keys
+        image: busybox:1.35
+        command: ["/bin/sh","-c"]
+        args:
+          - |
+            echo "Init container: setting up /config/.ssh authorized_keys..."
+            mkdir -p /config/.ssh
+            cp /tmp/authorized_keys /config/.ssh/authorized_keys
+            
+            # The linuxserver/openssh-server container typically runs as user "abc" 
+            # with PUID=1000 PGID=1000 (or sometimes 911:911).
+            # We'll assume 1000:1000 is correct. 
+            chown -R 1000:1000 /config/.ssh
+            chmod 700 /config/.ssh
+            chmod 600 /config/.ssh/authorized_keys
+        volumeMounts:
+          - name: ssh-config
+            mountPath: /config
+          - name: sshkeys-cm
+            mountPath: /tmp  # configmap is mounted here; file is /tmp/authorized_keys
+      # 2) main container: run linuxserver/openssh-server
+      containers:
+      - name: sshd
+        image: linuxserver/openssh-server:latest
+        ports:
+          - containerPort: 2222  # By default, it listens on 2222
+        env:
+          # Basic environment config
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: PUBLIC_KEY_ONLY
+            value: "true"
+          - name: PASSWORD_ACCESS
+            value: "false"
+          # Optionally define a "user" environment if you like:
+          - name: USER_NAME
+            value: "sshuser"
+          - name: SUDO_ACCESS
+            value: "false"
+          # SFTP_PORT might be 2222 or 22. 
+          - name: SFTP_PORT
+            value: "2222"
+        volumeMounts:
+          - name: ssh-config
+            mountPath: /config

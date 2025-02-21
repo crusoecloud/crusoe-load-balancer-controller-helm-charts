@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deploy
+  name: hello-world
   namespace: default
 spec:
   replicas: 1

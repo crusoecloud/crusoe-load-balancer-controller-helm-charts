@@ -35,12 +35,15 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
                   key: {{ .Values.crusoe.secrets.crusoeApiKeys.secretKeyPath}}
+            - name: CRUSOE_CLUSTER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
+                  key: {{ .Values.crusoe.secrets.crusoeApiKeys.clusterIdPath}}
             {{- with .Values.crusoe.projectID }}
             - name: CRUSOE_PROJECT_ID
               value: {{ . }}
             {{- end }}
-            - name: CRUSOE_VPC_ID
-              value: "{{ .Values.controller.env.CRUSOE_VPC_ID }}"
             - name: NODE_NAME
               valueFrom:
                 fieldRef:
