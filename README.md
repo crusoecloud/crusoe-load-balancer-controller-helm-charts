@@ -26,30 +26,19 @@ This Helm chart is:
 ### 1. Clone or Acquire the Helm Chart
 Ensure you have the Helm chart for the Crusoe LB Controller available locally.
 
-### 2. Configure the VPC ID
-Edit your `values.yaml` file and set the `CRUSOE_VPC_ID` under `controller.env`:
-
-```yaml
-controller:
-  env:
-    CRUSOE_VPC_ID: "your-vpc-id-here"
-```
-
-This VPC ID must match the VPC where your backend nodes reside.
-
-### 3. Choose the Namespace
+### 2. Choose the Namespace
 We **strongly recommend** deploying the LB controller in the `crusoe-system` namespace. The service account secrets required to interact with the Crusoe Load Balancer API are stored in this namespace by default.  
 
 If you wish to deploy the controller in a different namespace, you must copy the necessary secrets (`crusoe-secrets`) into that namespace.
 
-### 4. Install with Helm
+### 3. Install with Helm
 Navigate to the chart directory and install the controller:
 
 ```bash
 helm install crusoe-lb-controller ./crusoe-lb-controller --namespace crusoe-system
 ```
 
-### 5. Verify Installation
+### 4. Verify Installation
 Check the installed release:
 
 ```bash
