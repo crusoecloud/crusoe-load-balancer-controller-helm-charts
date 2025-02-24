@@ -40,10 +40,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
                   key: {{ .Values.crusoe.secrets.crusoeApiKeys.clusterIdPath}}
-            {{- with .Values.crusoe.projectID }}
             - name: CRUSOE_PROJECT_ID
-              value: {{ . }}
-            {{- end }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
+                  key: {{ .Values.crusoe.secrets.crusoeApiKeys.projectIdPath}}
             - name: NODE_NAME
               valueFrom:
                 fieldRef:

@@ -11,6 +11,7 @@ crusoe:
       accessKeyPath: "CRUSOE_ACCESS_KEY"
       secretKeyPath: "CRUSOE_SECRET_KEY"
       clusterIdPath: "CRUSOE_CLUSTER_ID"
+      projectIdPath: "CRUSOE_PROJECT_ID"
 
 controller:
   namespace: crusoe-system
