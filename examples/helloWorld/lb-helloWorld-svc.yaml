@@ -3,6 +3,15 @@ kind: Service
 metadata:
   name: example-lb-svc
   namespace: default
+  # Optionally set LB health check parameters e.g. 3 failed checks 
+  # within 10s will result in loadbalancer backend being marked as failed 
+  # and this will be reset in case of 2 successful checks within same duration. 
+  # Each health check will have a timeout of 5s
+  annotations:
+    crusoe.ai/health-check-failure-count: "3"
+    crusoe.ai/health-check-interval: "10"
+    crusoe.ai/health-check-success-count: "2"
+    crusoe.ai/health-check-timeout: "5"
 spec:
   selector:
     app: app

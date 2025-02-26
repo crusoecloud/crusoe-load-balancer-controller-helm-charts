@@ -1,7 +1,7 @@
 # Crusoe Load Balancer Controller Helm Chart
 
 This repository contains the **official Crusoe Load Balancer Controller Helm Chart** for use with [Crusoe Managed Kubernetes (CMK)](https://www.crusoecloud.com).  
-**Currently, the Crusoe Load Balancer Controller is in :construction: Alpha :construction:.**
+**Currently, the Crusoe Load Balancer Controller is in :construction: Private Beta :construction:.**
 
 ---
 
