@@ -25,6 +25,8 @@ spec:
           env:
             - name: CRUSOE_API_ENDPOINT
               value: "{{ .Values.controller.env.CRUSOE_API_ENDPOINT }}"
+            - name: CRUSOE_SUBNET_ID
+              value: "{{ .Values.controller.env.CRUSOE_SUBNET_ID }}"
             - name: CRUSOE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
@@ -36,10 +38,12 @@ spec:
                   name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
                   key: {{ .Values.crusoe.secrets.crusoeApiKeys.secretKeyPath}}
             - name: CRUSOE_CLUSTER_ID
+            {{- if not .Values.controller.env.CRUSOE_SUBNET_ID }}
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.crusoe.secrets.crusoeApiKeys.secretName}}
                   key: {{ .Values.crusoe.secrets.crusoeApiKeys.clusterIdPath}}
+            {{- end }}
             - name: CRUSOE_PROJECT_ID
               valueFrom:
                 secretKeyRef:

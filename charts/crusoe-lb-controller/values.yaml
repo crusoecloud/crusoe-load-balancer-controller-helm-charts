@@ -1,7 +1,4 @@
 crusoe:
-  # If not running on a Crusoe Managed Kubernetes cluster, projectID should be set to the Crusoe Cloud project ID
-  # for your cluster.
-  projectID: ""
   secrets:
     crusoeApiKeys:
       # The Crusoe LB Controller requires access to the Crusoe API in order to manage load balancer resources.
@@ -23,4 +20,5 @@ controller:
 
   env:
     CRUSOE_API_ENDPOINT: "https://api.crusoecloud.com/v1alpha5"
-    
+    # subnet_id is optional if using a cmk cluster but required for self-managed clusters
+    CRUSOE_SUBNET_ID: "" 
