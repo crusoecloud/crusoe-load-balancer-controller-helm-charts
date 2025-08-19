@@ -1,0 +1,21 @@
+apiVersion: v1
+entries:
+  crusoe-lb-controller:
+  - apiVersion: v2
+    appVersion: v0.0.23
+    created: "2025-08-19T19:14:35.5846901Z"
+    description: A Helm chart for the Crusoe Cloud LB Controller
+    digest: 676b03b96fefd4342cbf778d6d5f9d3dd10e5e193870fa8c956f0454260a4227
+    home: https://github.com/crusoecloud/crusoe-load-balancer-controller
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - name: Crusoe Cloud
+      url: https://github.com/crusoecloud/crusoe-load-balancer-controller
+    name: crusoe-lb-controller
+    sources:
+    - https://github.com/crusoecloud/crusoe-load-balancer-controller
+    type: application
+    urls:
+    - https://github.com/crusoecloud/crusoe-load-balancer-controller-helm-charts/releases/download/crusoe-lb-controller-0.0.23/crusoe-lb-controller-0.0.23.tgz
+    version: 0.0.23
+generated: "2025-08-19T19:14:35.584694558Z"
