@@ -53,3 +53,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            {{- with .Values.controller.extraEnv }}
+            {{- range $key, $value := . }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            {{- end }}

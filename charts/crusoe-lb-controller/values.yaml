@@ -21,4 +21,14 @@ controller:
   env:
     CRUSOE_API_ENDPOINT: "https://api.crusoecloud.com/v1alpha5"
     # subnet_id is optional if using a cmk cluster but required for self-managed clusters
-    CRUSOE_SUBNET_ID: "" 
+    CRUSOE_SUBNET_ID: ""
+
+  # Additional environment variables for proxy configuration and other optional settings.
+  # These are injected into the controller container after the core env variables.
+  #
+  # Example:
+  #   extraEnv:
+  #     HTTP_PROXY: "http://proxy.example.com:8080"
+  #     HTTPS_PROXY: "https://proxy.example.com:8080"
+  #     NO_PROXY: "localhost,127.0.0.1,.svc.cluster.local"
+  extraEnv: {}
