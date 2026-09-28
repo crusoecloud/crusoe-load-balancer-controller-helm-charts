@@ -29,6 +29,13 @@ rules:
     resources:
       - services/status
     verbs: ["patch", "update", "get"]
+  # Warning Events on Services (UnsupportedPortProtocol, ProtocolDrift, LoadBalancerCreateFailed),
+  # so problems only the user can fix show up in `kubectl describe svc`. Without this rule the API
+  # server rejects them; the controller keeps working and the warnings appear only in its logs.
+  - apiGroups: [""]
+    resources:
+      - events
+    verbs: ["create", "patch"]
 
 ---
 # ClusterRoleBinding
