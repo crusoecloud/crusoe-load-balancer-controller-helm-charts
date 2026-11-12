@@ -9,6 +9,15 @@ crusoe:
       secretKeyPath: "CRUSOE_SECRET_KEY"
       clusterIdPath: "CRUSOE_CLUSTER_ID"
       projectIdPath: "CRUSOE_PROJECT_ID"
+      # IAM service account (OAuth2 client credentials) keys. All four are optional:
+      # the controller authenticates with the service account when the secret carries
+      # them, falling back to the access/secret key pair above on an auth rejection.
+      # tokenUrl/audience default to production inside the controller and must both
+      # be present in the secret for non-production environments.
+      clientIdPath: "CRUSOE_CLIENT_ID"
+      clientSecretPath: "CRUSOE_CLIENT_SECRET"
+      tokenUrlPath: "CRUSOE_TOKEN_URL"
+      audiencePath: "CRUSOE_AUDIENCE"
 
 controller:
   namespace: crusoe-system
